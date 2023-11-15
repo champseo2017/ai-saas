@@ -17,7 +17,8 @@ const configuration = new Configuration({
 
 const openAi = new OpenAIApi(configuration);
 
-export const POST = async (req: Request) => {
+export async function POST(req: Request) {
+  console.log("api keyyyyyy", process.env.OPENAI_API_KEY);
   try {
     const { userId } = auth();
     if (!userId) {
@@ -38,8 +39,10 @@ export const POST = async (req: Request) => {
       model: "gpt-3.5-turbo",
       messages,
     } as ExtendedCreateCompletionRequest);
+    console.log("response", response);
+    return new NextResponse("Done", { status: 200 });
   } catch (error) {
     console.log("[CONVERSATION_ERROR]", error);
     return new NextResponse("Internal error", { status: 500 });
   }
-};
+}

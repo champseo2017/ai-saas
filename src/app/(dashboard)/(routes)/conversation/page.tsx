@@ -34,7 +34,12 @@ const ConversationPage = () => {
         content: values.prompt,
       };
       const newMessages = [...messages, userMessage];
-      const response = await axios;
+      const response = await axios.post("/api/conversation", {
+        messages: newMessages,
+      });
+
+      setMessages((current) => [...current, userMessage, response.data]);
+      form.reset();
     } catch (error: any) {
       console.log(error);
     } finally {
@@ -82,7 +87,13 @@ const ConversationPage = () => {
             </form>
           </Form>
         </div>
-        <div className="mt-4 space-y-4">Messages Content</div>
+        <div className="mt-4 space-y-4">
+          <div className="flex flex-col-reverse gap-y-4">
+            {messages.map((message) => (
+              <div key={message.content}>{message.content}</div>
+            ))}
+          </div>
+        </div>
       </div>
     </div>
   );
